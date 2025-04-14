@@ -1,17 +1,20 @@
-# Utiliser l'image officielle d'Apache
-FROM php:7.4-apache
+# Dockerfile
 
-# Activer le module mod_rewrite (utile pour les frameworks PHP comme Laravel)
-RUN a2enmod rewrite
+FROM php:8.1-apache
 
-# Copier le fichier de configuration du VirtualHost dans le conteneur
-COPY ./config/vhost.conf /etc/apache2/sites-available/000-default.conf
+# Installer dépendances système + extensions PHP
+RUN apt-get update && \
+    apt-get install -y unzip curl git zip && \
+    docker-php-ext-install mysqli && \
+    a2enmod rewrite
 
-# Copier les fichiers de l'application dans le répertoire approprié d'Apache
-COPY . /var/www/html/
+# Installer Composer
+RUN curl -sS https://getcomposer.org/installer | php && \
+    mv composer.phar /usr/local/bin/composer
 
-# Exposer le port 80 pour que l'application soit accessible
-EXPOSE 80
+# Copier le code source dans le conteneur
+COPY . /var/www/
 
-# Configurer les droits d'accès à /var/www/html
-RUN chown -R www-data:www-data /var/www/html
+# Installer les dépendances PHP
+WORKDIR /var/www/html
+RUN composer install
