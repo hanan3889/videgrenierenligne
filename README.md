@@ -68,6 +68,6 @@ Ajoutez la ligne suivante à la fin du fichier :
 
 ### 5. 🚀 Lancer l'application en local 
 
-faire `php -S localhost:8000` ou utiliser l'extension vscode Live server
+faire `php -S videgrenierenligne.local` ou utiliser l'extension vscode Live server
 et se rendre 
 http://videgrenierenligne.local 
