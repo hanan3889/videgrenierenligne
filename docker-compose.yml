@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    container_name: grenier_web
+    ports:
+      - "5501:80"
+    volumes:
+      - .:/var/www         
+      - ./public:/var/www/html
+    depends_on:
+      - db
+    working_dir: /var/www/html
+    networks:
+      - grenier_net
+
+  node:
+    image: node:18
+    container_name: grenier_node
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm install && npm run watch"
+    networks:
+      - grenier_net
+
+  db:
+    image: mysql:5.7
+    container_name: grenier_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: videgrenierenligne
+      MYSQL_USER: webapplication
+      MYSQL_PASSWORD: 653rag9T
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "5500:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - grenier_net
+
+volumes:
+  db_data:
+
+networks:
+  grenier_net:

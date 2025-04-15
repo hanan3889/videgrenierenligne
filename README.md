@@ -1,49 +1,73 @@
-# Vide Grenier en Ligne
+# 🧺 VideGrenierEnLigne — Application Local
 
-Ce Readme.md est à destination des futurs repreneurs du site-web Vide Grenier en Ligne.
+Ce projet est une application **VideGrenierEnLigne** fonctionnant sur un serveur local avec **XAMPP** et une gestion des assets via **npm**. Il ne repose sur aucun framework comme Laravel et peut être facilement lancé avec un VirtualHost.
 
-## Mise en place du projet back-end
+---
 
-1. Créez un VirtualHost pointant vers le dossier /public du site web (Apache)
-2. Importez la base de données MySQL (sql/import.sql)
-3. Connectez le projet et la base de données via les fichiers de configuration
-4. Lancez la commande `composer install` pour les dépendances
+## ✅ Prérequis
 
-## Mise en place du projet front-end
-1. npm uninstall node-sass
-2. npm  `npm install sass --save-dev`
-3. modifier le package.json avec  "watch": "npx sass --watch style:public/style"
+- [XAMPP](https://www.apachefriends.org/index.html) installé (avec Apache et PHP)
+- [Node.js + npm](https://nodejs.org/)
+- Accès administrateur pour modifier les fichiers système (fichier `hosts`)
 
-## Routing
+---
 
-Le [Router](Core/Router.php) traduit les URLs. 
+## 📁 Installation
 
-Les routes sont ajoutées via la méthode `add`. 
+### 1. Cloner ou copier le projet
 
-En plus des **controllers** et **actions**, vous pouvez spécifier un paramètre comme pour la route suivante:
+Copiez le projet dans le dossier `htdocs` de votre installation XAMPP, par exemple :
 
-```php
-$router->add('product/{id:\d+}', ['controller' => 'Product', 'action' => 'show']);
+```bash
+cd C:\xampp\htdocs\videgrenierenligne
+
+---
+
+
+
+Ouvrir un terminal dans **VS Code** ou un terminal classique et allez dans le répertoire du projet :
+
+```bash
+cd C:\xampp\htdocs\videgrenierenligne
 ```
+### 2. Installer les dépendances
+
+`npm install` &
+`npm install sass --save-dev`
+
+### 3. Créer la BDD sur phpmyadmin `videgrenierenligne`
+
+faire un import du fichier import.sql qui se trouve dans le dossier sql
+
+### 4. Configuration du VirtualHost avec XAMPP
+
+Ouvrez le fichier httpd-vhosts.conf 
+
+C:\xampp\apache\conf\extra\httpd-vhosts.conf
+
+1. Ajouter la configuration suivante :
+<VirtualHost *:80>
+    DocumentRoot "C:/xampp/htdocs/Laravel_projects/videgrenierenligne/public"
+    ServerName videgrenierenligne.local
+
+    <Directory "C:/xampp/htdocs/Laravel_projects/videgrenierenligne/public">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+2. Modifier le fichier hosts de Windows
+C:\Windows\System32\drivers\etc\hosts
+Ajoutez la ligne suivante à la fin du fichier :
 
 
-## Vues
+127.0.0.1 videgrenierenligne.local
 
-Les vues sont rendues grâce à **Twig**. 
-Vous les retrouverez dans le dossier `App/Views`. 
+3. Redémarrer Apache via XAMPP
 
-```php
-View::renderTemplate('Home/index.html', [
-    'name'    => 'Toto',
-    'colours' => ['rouge', 'bleu', 'vert']
-]);
-```
-## Models
+### 5. 🚀 Lancer l'application en local 
 
-Les modèles sont utilisés pour récupérer ou stocker des données dans l'application. Les modèles héritent de `Core
-\Model
-` et utilisent [PDO](http://php.net/manual/en/book.pdo.php) pour l'accès à la base de données. 
-
-```php
-$db = static::getDB();
-```
+faire `php -S videgrenierenligne.local` ou utiliser l'extension vscode Live server
+et se rendre 
+http://videgrenierenligne.local 
